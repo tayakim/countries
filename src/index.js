@@ -4,7 +4,10 @@ import fetchCountries from './js/fetchCountries.js';
 import countriesList from './template/countriesList.hbs';
 import countryListItem from './template/countryListItem.hbs';
 import debounce from 'lodash.debounce';
-// import { alert, error } from './node_modules/@pnotify/core/dist/PNotify.js';
+import '@pnotify/core/dist/BrightTheme.css';
+import '@pnotify/core/dist/PNotify.css';
+import { error } from '@pnotify/core';
+
 
 
 const refs = {
@@ -23,19 +26,17 @@ function searchFormInputHandler(e) {
     fetchCountries(searchQuery).then(data => {
         const markup = buildListItemMarkup(data);
         const renderCountriesList = buildCountriesList(data);
-        if (!data) {
-            return;
-        } else if (data.length > 10) {
+        console.log(data);
+        if (data.length > 10) {
             error({
-                title: 'ERROR!!',
-                text: 'Please, write correct!',
+                text: 'Too many matches found. Please enter a more specific query!',
             });
         } else if (data.length >= 2 && data.length <= 10) {
             insertListItem(renderCountriesList);
         } else if (data.length === 1) {
             insertListItem(markup);
         } else {
-            alert(' Error 404');
+            return;
         }
     });
 }
